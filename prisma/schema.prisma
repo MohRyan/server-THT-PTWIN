@@ -52,7 +52,7 @@ model Product {
   img_product  String   @db.VarChar(255)
   price        Decimal  @db.Decimal(10, 2)
   description  String   @db.VarChar(255)
-  sku          String   @db.VarChar(50)
+  sku          String   @unique @db.VarChar(50)
   diskon       Decimal? @db.Decimal(2, 1)
   rating       Decimal? @default(5) @db.Decimal(2, 1)
 

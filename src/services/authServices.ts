@@ -46,6 +46,8 @@ const login = async (body: Users): Promise<{ token: string }> => {
     email: value.email,
   });
 
+  const idUser = { id: existEmail?.id };
+
   if (!existEmail) {
     throw new Error(ERROR_MESSAGE.DATA_NOT_FOUND);
   }
@@ -59,7 +61,7 @@ const login = async (body: Users): Promise<{ token: string }> => {
     throw new Error(ERROR_MESSAGE.DATA_NOT_FOUND);
   }
 
-  const token = jwt.sign(existEmail, process.env.SECRET_KEY!, {
+  const token = jwt.sign(idUser, process.env.SECRET_KEY!, {
     expiresIn: "2d",
   });
 

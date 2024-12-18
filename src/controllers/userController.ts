@@ -4,9 +4,9 @@ import { errorHandler } from "../utils/errorHandler";
 
 export const getUserWithToken = async (req: Request, res: Response) => {
   try {
-    const { userId } = res.locals;
+    const { id } = res.locals.userId;
 
-    const dataUser = await userService.getUserWithToken(userId);
+    const dataUser = await userService.getUserWithToken(id);
 
     res.status(200).json(dataUser);
   } catch (error) {
@@ -22,8 +22,7 @@ export const getUserWithToken = async (req: Request, res: Response) => {
 
 export const getUser = async (req: Request, res: Response) => {
   try {
-    const { params } = req;
-    const { userId } = params;
+    const { userId } = req.params;
 
     const dataUser = await userService.getUser(userId);
 
@@ -59,8 +58,7 @@ export const createUser = async (req: Request, res: Response) => {
 
 export const deleteUser = async (req: Request, res: Response) => {
   try {
-    const { params } = req;
-    const { userId } = params;
+    const { userId } = req.params;
 
     const messageDeleteUser = await userService.deleteUsers(userId);
 

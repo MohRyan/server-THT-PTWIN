@@ -1,26 +1,36 @@
-import { Users } from "@prisma/client";
+import { Product, Profile, Users } from "@prisma/client";
 import db from "../lib/db";
 import { ERROR_MESSAGE } from "../utils/constant/error";
 
-export const getUserWithToken = async (id: string): Promise<Users | null> => {
+export const getUserWithToken = async (id: string) => {
   return db.users.findFirst({
     where: {
       id,
     },
-    include: {
-      profile: true
-    }
+    select: {
+      id: true,
+      name: true,
+      email: true,
+      gender: true,
+      profile: true,
+      product: true
+    },
   });
 };
 
-export const getUser = async (id: string): Promise<Users | null> => {
+export const getUser = async (userId: string) => {
   return db.users.findFirst({
     where: {
-      id,
+      id: userId,
     },
-    include: {
-      profile: true
-    }
+    select: {
+      id: true,
+      name: true,
+      email: true,
+      gender: true,
+      profile: true,
+      product: true
+    },
   });
 };
 
@@ -30,10 +40,10 @@ export const insertUser = async (body: Users): Promise<Users> => {
   });
 };
 
-export const deleteUsers = async (id: string): Promise<string> => {
+export const deleteUsers = async (userId: string): Promise<string> => {
   const existUser = await db.users.findFirst({
     where: {
-      id,
+      id: userId,
     },
   });
 
@@ -43,20 +53,20 @@ export const deleteUsers = async (id: string): Promise<string> => {
 
   await db.users.delete({
     where: {
-      id,
+      id: userId,
     },
   });
 
-  return " Sukses delete user dengan id " + id;
+  return " Sukses delete user dengan id " + userId;
 };
 
 export const updateUser = async (
-  id: string,
+  userId: string,
   body: Users
 ): Promise<Users | Error> => {
   const existUser = await db.users.findFirst({
     where: {
-      id,
+      id: userId,
     },
   });
 
@@ -66,7 +76,7 @@ export const updateUser = async (
 
   return db.users.update({
     where: {
-      id,
+      id: userId,
     },
     data: body,
   });
