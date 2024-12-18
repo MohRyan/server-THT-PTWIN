@@ -1,0 +1,65 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
+}
+
+enum Gender {
+  PRIA
+  WANITA
+}
+
+model Users {
+  id       String    @id @default(uuid())
+  name     String?   @db.VarChar(255)
+  email    String?   @unique @db.VarChar(255)
+  password String?   @db.VarChar(255)
+  gender   Gender    @default(PRIA)
+  profile  Profile?
+  product  Product[]
+
+  @@map("users")
+}
+
+model Profile {
+  id     String @id @default(uuid())
+  avatar String @unique @db.VarChar(125)
+  banner String @unique @db.VarChar(125)
+  bio    String @db.VarChar(255)
+
+  userId String @unique
+  user   Users  @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("profile")
+}
+
+model Product {
+  id           String   @id @default(uuid())
+  name_product String   @db.VarChar(255)
+  img_product  String   @db.VarChar(255)
+  price        Decimal  @db.Decimal(10, 2)
+  description  String   @db.VarChar(255)
+  sku          String   @db.VarChar(50)
+  diskon       Decimal? @db.Decimal(2, 1)
+  rating       Decimal? @default(5) @db.Decimal(2, 1)
+
+  userId    String
+  user      Users    @relation(fields: [userId], references: [id], onDelete: Cascade)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("product")
+}
