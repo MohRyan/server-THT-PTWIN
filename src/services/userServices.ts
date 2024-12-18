@@ -2,11 +2,25 @@ import { Users } from "@prisma/client";
 import db from "../lib/db";
 import { ERROR_MESSAGE } from "../utils/constant/error";
 
+export const getUserWithToken = async (id: string): Promise<Users | null> => {
+  return db.users.findFirst({
+    where: {
+      id,
+    },
+    include: {
+      profile: true
+    }
+  });
+};
+
 export const getUser = async (id: string): Promise<Users | null> => {
   return db.users.findFirst({
     where: {
       id,
     },
+    include: {
+      profile: true
+    }
   });
 };
 
@@ -57,17 +71,6 @@ export const updateUser = async (
     data: body,
   });
 };
-
-// update untuk versi function
-
-// export function updateUserFUNC(id: string, body: Users): Promise<Users> {
-//     return db.users.update({
-//         where: {
-//             id
-//         },
-//         data: body
-//     })
-// }
 
 export const getSingleUser = async (condition: {
   [key: string]: string;
