@@ -25,17 +25,12 @@ const app = (0, express_1.default)();
 app.use(express_1.default.json());
 app.use(express_1.default.urlencoded({ extended: true }));
 // app.use("/uploads", express.static(path.join(__dirname, "src/uploads"))) # untuk menjadikan sebuah folder bisa diakses secara global
-app.use((0, cors_1.default)({
-    origin: ["http://localhost:4000", "https://server-tht-ptwin.vercel.app/"], // Sesuaikan origin
-    methods: ["GET", "POST", "PUT", "DELETE"],
-    allowedHeaders: ["Content-Type", "Authorization"],
-}));
-app.use('/swagger-ui', express_1.default.static(path_1.default.join(__dirname, 'swagger-ui')));
-app.use("/apiDocs", swagger_ui_express_1.default.serve, swagger_ui_express_1.default.setup(swaggerDocument));
+app.use((0, cors_1.default)());
 app.use(routers_1.default);
 app.get("/", (req, res) => {
     res.send("THT-PTWIN");
 });
+app.use("/apiDocs", swagger_ui_express_1.default.serve, swagger_ui_express_1.default.setup(swaggerDocument));
 app.listen(PORT, () => __awaiter(void 0, void 0, void 0, function* () {
     console.log("🚀 ~ app.listen ~ PORT:", PORT);
 }));
