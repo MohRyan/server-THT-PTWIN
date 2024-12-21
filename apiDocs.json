@@ -1,0 +1,560 @@
+{
+    "openapi": "3.0.3",
+    "info": {
+        "title": "THT-PT.WIN Documentation",
+        "version": "1.0"
+    },
+    "servers": [
+        {
+            "url": "http://localhost:4000"
+        }
+    ],
+    "components": {
+        "securitySchemes": {
+            "BearerAuth": {
+                "type": "http",
+                "scheme": "bearer",
+                "bearerFormat": "JWT"
+            }
+        },
+        "schemas": {
+            "Login": {
+                "type": "object",
+                "properties": {
+                    "email": {
+                        "type": "string",
+                        "format": "email"
+                    },
+                    "password": {
+                        "type": "string",
+                        "format": "password"
+                    }
+                },
+                "required": [
+                    "email",
+                    "password"
+                ]
+            },
+            "Register": {
+                "type": "object",
+                "properties": {
+                    "name": {
+                        "type": "string"
+                    },
+                    "email": {
+                        "type": "string",
+                        "format": "email"
+                    },
+                    "password": {
+                        "type": "string",
+                        "format": "password"
+                    },
+                    "gender": {
+                        "type": "string",
+                        "enum": [
+                            "PRIA",
+                            "WANITA"
+                        ]
+                    }
+                },
+                "required": [
+                    "name",
+                    "email",
+                    "password",
+                    "gender"
+                ]
+            },
+            "ProfileRequest": {
+                "type": "object",
+                "properties": {
+                    "name": {
+                        "type": "string"
+                    },
+                    "avatar": {
+                        "type": "string"
+                    },
+                    "banner": {
+                        "type": "string"
+                    }
+                },
+                "required": [
+                    "name",
+                    "avatar",
+                    "banner"
+                ]
+            },
+            "ProfileResponse": {
+                "type": "object",
+                "properties": {
+                    "id": {
+                        "type": "string"
+                    },
+                    "userId": {
+                        "type": "string"
+                    },
+                    "name": {
+                        "type": "string"
+                    },
+                    "avatar": {
+                        "type": "string"
+                    },
+                    "banner": {
+                        "type": "string"
+                    },
+                    "createdAt": {
+                        "type": "number"
+                    },
+                    "updatedAt": {
+                        "type": "number"
+                    }
+                },
+                "required": [
+                    "id",
+                    "userId",
+                    "name",
+                    "avatar",
+                    "banner",
+                    "createdAt",
+                    "updatedAt"
+                ]
+            },
+            "ProductReq": {
+                "type": "object",
+                "properties": {
+                    "name_product": {
+                        "type": "string"
+                    },
+                    "img_product": {
+                        "type": "string"
+                    },
+                    "price": {
+                        "type": "number"
+                    },
+                    "description": {
+                        "type": "string"
+                    },
+                    "diskon": {
+                        "type": "number"
+                    },
+                    "rating": {
+                        "type": "number"
+                    }
+                },
+                "required": [
+                    "name_product",
+                    "img_product",
+                    "price",
+                    "description",
+                    "diskon",
+                    "rating"
+                ]
+            },
+            "ProductRes": {
+                "type": "array",
+                "items": {
+                    "properties": {
+                        "id": {
+                            "type": "string"
+                        },
+                        "userId": {
+                            "type": "string"
+                        },
+                        "name_product": {
+                            "type": "string"
+                        },
+                        "img_product": {
+                            "type": "string"
+                        },
+                        "price": {
+                            "type": "number"
+                        },
+                        "description": {
+                            "type": "string"
+                        },
+                        "diskon": {
+                            "type": "number"
+                        },
+                        "rating": {
+                            "type": "number"
+                        },
+                        "sku": {
+                            "type": "string"
+                        },
+                        "createdAt": {
+                            "type": "number"
+                        },
+                        "updatedAt": {
+                            "type": "number"
+                        }
+                    }
+                }
+            },
+            "ProductDetail": {
+                "type": "object",
+                "allOf": [
+                    {
+                        "$ref": "#/components/schemas/ProductRes/items"
+                    }
+                ]
+            }
+        }
+    },
+    "paths": {
+        "/login": {
+            "post": {
+                "tags": [
+                    "Auth API"
+                ],
+                "summary": "Login",
+                "description": "Endpoint for user login",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/Login"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Login successful",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "code": {
+                                            "type": "number"
+                                        },
+                                        "status": {
+                                            "type": "string"
+                                        },
+                                        "data": {
+                                            "type": "object",
+                                            "properties": {
+                                                "token": {
+                                                    "type": "string",
+                                                    "description": "JWT token"
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Invalid credentials"
+                    }
+                }
+            }
+        },
+        "/register": {
+            "post": {
+                "tags": [
+                    "Auth API"
+                ],
+                "summary": "Register",
+                "description": "Endpoint for user registration",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/Register"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Registration successful",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "code": {
+                                            "type": "number"
+                                        },
+                                        "status": {
+                                            "type": "string"
+                                        },
+                                        "data": {
+                                            "type": "object",
+                                            "properties": {
+                                                "id": {
+                                                    "type": "number"
+                                                },
+                                                "name": {
+                                                    "type": "string"
+                                                },
+                                                "email": {
+                                                    "type": "string"
+                                                },
+                                                "gender": {
+                                                    "type": "string"
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad request"
+                    }
+                }
+            }
+        },
+        "/profile": {
+            "post": {
+                "tags": [
+                    "Profile API"
+                ],
+                "summary": "Create Profile",
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "description": "Endpoint for creating user profile",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/ProfileRequest"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Profile created successfully",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ProfileResponse"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized - Token is invalid or missing"
+                    }
+                }
+            },
+            "delete": {
+                "tags": [
+                    "Profile API"
+                ],
+                "summary": "Delete Profile",
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "description": "Endpoint for deleting user profile",
+                "responses": {
+                    "200": {
+                        "description": "Profile deleted successfully",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ProfileResponse"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized - Token is invalid or missing"
+                    }
+                }
+            },
+            "patch": {
+                "tags": [
+                    "Profile API"
+                ],
+                "summary": "Update Profile",
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "description": "Endpoint for updating user profile",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/ProfileRequest"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Profile updated successfully",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ProfileResponse"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized - Token is invalid or missing"
+                    }
+                }
+            }
+        },
+        "/product": {
+            "get": {
+                "tags": [
+                    "Product API"
+                ],
+                "summary": "Get All Product",
+                "description": "Endpoint for getting all products",
+                "responses": {
+                    "200": {
+                        "description": "Success",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ProductRes"
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "post": {
+                "tags": [
+                    "Product API"
+                ],
+                "summary": "Create Product",
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "description": "Endpoint for creating product",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/ProductReq"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Product created successfully",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ProductDetail"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized - Token is invalid or missing"
+                    }
+                }
+            }
+        },
+        "/product/:productId": {
+            "get": {
+                "tags": [
+                    "Product API"
+                ],
+                "summary": "Get Single Product / Product Detail",
+                "description": "Endpoint for getting all products",
+                "responses": {
+                    "200": {
+                        "description": "Success",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ProductDetail"
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "tags": [
+                    "Product API"
+                ],
+                "summary": "Delete Product",
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "description": "Endpoint for deleting product",
+                "responses": {
+                    "200": {
+                        "description": "Product deleted successfully",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ProductDetail"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized - Token is invalid or missing"
+                    }
+                }
+            },
+            "put": {
+                "tags": [
+                    "Product API"
+                ],
+                "summary": "Update Product",
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "description": "Endpoint for updating product",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/ProductReq"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Product updated successfully",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ProductDetail"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized - Token is invalid or missing"
+                    }
+                }
+            }
+        }
+    }
+}
