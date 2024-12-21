@@ -8,8 +8,8 @@
   "description": "default folder express dan auth",
   "scripts": {
     "dev": "nodemon server.ts",
-    "build": "tsc",
-    "start": "node server.ts",
+    "build": "tsc && xcopy /y apiDocs.json dist\\apiDocs.json",
+    "start": "node dist/server.js",
     "postinstall": "prisma generate"
   },
   "dependencies": {
