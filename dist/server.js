@@ -30,11 +30,12 @@ app.use((0, cors_1.default)({
     methods: ["GET", "POST", "PUT", "DELETE"],
     allowedHeaders: ["Content-Type", "Authorization"],
 }));
+app.use('/swagger-ui', express_1.default.static(path_1.default.join(__dirname, 'swagger-ui')));
+app.use("/apiDocs", swagger_ui_express_1.default.serve, swagger_ui_express_1.default.setup(swaggerDocument));
 app.use(routers_1.default);
 app.get("/", (req, res) => {
     res.send("THT-PTWIN");
 });
-app.use("/apiDocs", swagger_ui_express_1.default.serve, swagger_ui_express_1.default.setup(swaggerDocument));
 app.listen(PORT, () => __awaiter(void 0, void 0, void 0, function* () {
     console.log("🚀 ~ app.listen ~ PORT:", PORT);
 }));

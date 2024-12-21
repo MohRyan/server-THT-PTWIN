@@ -10,6 +10,10 @@
         {
             "src": "/(.*)",
             "dest": "dist/server.js"
+        },
+        {
+            "src": "/swagger-ui/(.*)",
+            "dest": "/public/swagger-ui/$1"
         }
     ]
 }

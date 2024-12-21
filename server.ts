@@ -21,14 +21,15 @@ app.use(
     allowedHeaders: ["Content-Type", "Authorization"],
   })
 );
+app.use('/swagger-ui', express.static(path.join(__dirname, 'swagger-ui')));
+app.use("/apiDocs", swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 
 app.use(indexRouter);
 
 app.get("/", (req, res) => {
   res.send("THT-PTWIN");
-});
 
-app.use("/apiDocs", swaggerUi.serve, swaggerUi.setup(swaggerDocument));
+});
 
 app.listen(PORT, async () => {
   console.log("🚀 ~ app.listen ~ PORT:", PORT);
